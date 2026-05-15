@@ -1,7 +1,7 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const arenaSize = canvas.width;
-const baseSpeed = 7.0;
+const baseSpeed = 6.6;
 const turnRate = 0.17;
 const baseRadius = 25;
 const boneRadius = 18;
@@ -617,6 +617,10 @@ function drawDog() {
   const { headX, headY, bodyPoint, rumpPoint, bodyAngle, forwardX, forwardY, normalX, normalY, bodyRadius, headRadius, neckRadius, rumpRadius } = pose;
   const backX = -forwardX;
   const backY = -forwardY;
+  const chestX = headX - forwardX * dog.radius * 0.42;
+  const chestY = headY - forwardY * dog.radius * 0.42;
+  const bellyX = (bodyPoint.x + rumpPoint.x) / 2 + normalX * bodyRadius * 0.28;
+  const bellyY = (bodyPoint.y + rumpPoint.y) / 2 + normalY * bodyRadius * 0.28;
 
   ctx.save();
 
@@ -631,6 +635,10 @@ function drawDog() {
   ctx.moveTo(tailBaseX, tailBaseY);
   ctx.lineTo(tailTipX, tailTipY);
   ctx.stroke();
+  ctx.fillStyle = "#c41f1f";
+  ctx.beginPath();
+  ctx.arc(tailTipX, tailTipY, dog.radius * 0.1, 0, Math.PI * 2);
+  ctx.fill();
 
   drawConnectedBody(
     { x: headX - forwardX * bodyRadius * 0.24, y: headY - forwardY * bodyRadius * 0.24 },
@@ -644,8 +652,8 @@ function drawDog() {
   ctx.fillStyle = "#f6d7bf";
   ctx.beginPath();
   ctx.ellipse(
-    (bodyPoint.x + rumpPoint.x) / 2 + normalX * bodyRadius * 0.28,
-    (bodyPoint.y + rumpPoint.y) / 2 + normalY * bodyRadius * 0.28,
+    bellyX,
+    bellyY,
     bodyRadius * 0.92,
     bodyRadius * 0.3,
     bodyAngle,
@@ -658,6 +666,10 @@ function drawDog() {
   ctx.beginPath();
   ctx.ellipse(bodyPoint.x - normalX * bodyRadius * 0.14, bodyPoint.y - normalY * bodyRadius * 0.14, bodyRadius * 0.42, bodyRadius * 0.18, bodyAngle - 0.18, 0, Math.PI * 2);
   ctx.fill();
+  ctx.fillStyle = "#c91d1d";
+  ctx.beginPath();
+  ctx.ellipse(rumpPoint.x - normalX * bodyRadius * 0.06, rumpPoint.y - normalY * bodyRadius * 0.05, bodyRadius * 0.5, bodyRadius * 0.42, bodyAngle, 0, Math.PI * 2);
+  ctx.fill();
 
   const legSpread = dog.radius * 0.24;
   drawLeg(bodyPoint.x + backX * dog.radius * 0.28 + normalX * legSpread, bodyPoint.y + backY * dog.radius * 0.28 + normalY * legSpread, dog.radius * 0.8, bodyAngle, "#f7d9ca");
@@ -667,7 +679,11 @@ function drawDog() {
 
   ctx.fillStyle = "#cf1f1f";
   ctx.beginPath();
-  ctx.ellipse(headX - forwardX * dog.radius * 0.42, headY - forwardY * dog.radius * 0.42, neckRadius, neckRadius * 0.72, bodyAngle, 0, Math.PI * 2);
+  ctx.ellipse(chestX, chestY, neckRadius, neckRadius * 0.72, bodyAngle, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "#f6d7bf";
+  ctx.beginPath();
+  ctx.ellipse(chestX + normalX * dog.radius * 0.2, chestY + normalY * dog.radius * 0.18, neckRadius * 0.42, neckRadius * 0.28, bodyAngle, 0, Math.PI * 2);
   ctx.fill();
 
   drawEar(headX - forwardX * headRadius * 0.22 + Math.cos(bodyAngle - 1.72) * headRadius * 0.76, headY - forwardY * headRadius * 0.22 + Math.sin(bodyAngle - 1.72) * headRadius * 0.76, bodyAngle - 0.2, headRadius * 0.82);
@@ -677,12 +693,20 @@ function drawDog() {
   ctx.beginPath();
   ctx.arc(headX, headY, headRadius, 0, Math.PI * 2);
   ctx.fill();
+  ctx.fillStyle = "rgba(255, 255, 255, 0.12)";
+  ctx.beginPath();
+  ctx.ellipse(headX - normalX * headRadius * 0.18 - forwardX * headRadius * 0.08, headY - normalY * headRadius * 0.18 - forwardY * headRadius * 0.08, headRadius * 0.28, headRadius * 0.16, bodyAngle - 0.3, 0, Math.PI * 2);
+  ctx.fill();
 
   const snoutX = headX + forwardX * headRadius * 0.94;
   const snoutY = headY + forwardY * headRadius * 0.94;
   ctx.fillStyle = "#f3d2c4";
   ctx.beginPath();
   ctx.ellipse(snoutX, snoutY, headRadius * 0.68, headRadius * 0.48, bodyAngle, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "#fff7f0";
+  ctx.beginPath();
+  ctx.ellipse(snoutX - forwardX * headRadius * 0.16, snoutY - forwardY * headRadius * 0.1, headRadius * 0.4, headRadius * 0.24, bodyAngle, 0, Math.PI * 2);
   ctx.fill();
 
   const leftEyeX = headX + Math.cos(bodyAngle - 0.48) * headRadius * 0.32;
@@ -709,11 +733,17 @@ function drawDog() {
   ctx.beginPath();
   ctx.arc(snoutX + forwardX * headRadius * 0.18, snoutY + forwardY * headRadius * 0.02, headRadius * 0.16, 0, Math.PI * 2);
   ctx.fill();
+  ctx.strokeStyle = "#6d1111";
+  ctx.lineWidth = Math.max(2, headRadius * 0.05);
+  ctx.beginPath();
+  ctx.moveTo(snoutX + forwardX * headRadius * 0.12, snoutY + forwardY * headRadius * 0.1);
+  ctx.lineTo(snoutX + forwardX * headRadius * 0.08, snoutY + forwardY * headRadius * 0.22);
+  ctx.stroke();
 
   ctx.strokeStyle = "#7e0d0d";
   ctx.lineWidth = Math.max(2, headRadius * 0.06);
   ctx.beginPath();
-  ctx.arc(snoutX + forwardX * headRadius * 0.03, snoutY + forwardY * headRadius * 0.22, headRadius * 0.28, 0.18, Math.PI - 0.18);
+  ctx.arc(snoutX + forwardX * headRadius * 0.03, snoutY + forwardY * headRadius * 0.24, headRadius * 0.28, 0.18, Math.PI - 0.18);
   ctx.stroke();
 
   ctx.fillStyle = "#ff7fa1";
@@ -733,6 +763,11 @@ function drawDog() {
   ctx.beginPath();
   ctx.arc(headX + Math.cos(bodyAngle - 1.82) * headRadius * 0.48, headY + Math.sin(bodyAngle - 1.82) * headRadius * 0.48 + headRadius * 0.12, headRadius * 0.12, 0, Math.PI * 2);
   ctx.arc(headX + Math.cos(bodyAngle + 1.82) * headRadius * 0.48, headY + Math.sin(bodyAngle + 1.82) * headRadius * 0.48 + headRadius * 0.12, headRadius * 0.12, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = "#ffffff";
+  ctx.beginPath();
+  ctx.ellipse(bellyX + backX * bodyRadius * 0.1, bellyY + backY * bodyRadius * 0.04, bodyRadius * 0.18, bodyRadius * 0.06, bodyAngle, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.restore();
