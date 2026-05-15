@@ -1,7 +1,7 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 const arenaSize = canvas.width;
-const baseSpeed = 6.2;
+const baseSpeed = 5.4;
 const turnRate = 0.17;
 const baseRadius = 25;
 const boneRadius = 18;
@@ -695,63 +695,97 @@ function drawDog() {
   ctx.beginPath();
   ctx.arc(headX, headY, headRadius, 0, Math.PI * 2);
   ctx.fill();
-  ctx.fillStyle = "rgba(255, 255, 255, 0.12)";
+  ctx.fillStyle = "#b81818";
   ctx.beginPath();
-  ctx.ellipse(headX - normalX * headRadius * 0.18 - forwardX * headRadius * 0.08, headY - normalY * headRadius * 0.18 - forwardY * headRadius * 0.08, headRadius * 0.28, headRadius * 0.16, bodyAngle - 0.3, 0, Math.PI * 2);
+  ctx.ellipse(
+    headX - forwardX * headRadius * 0.16,
+    headY - forwardY * headRadius * 0.08,
+    headRadius * 0.84,
+    headRadius * 0.72,
+    bodyAngle,
+    0,
+    Math.PI * 2,
+  );
+  ctx.fill();
+  ctx.fillStyle = "#d62323";
+  ctx.beginPath();
+  ctx.arc(headX, headY, headRadius * 0.9, 0, Math.PI * 2);
   ctx.fill();
 
   const snoutX = headX + forwardX * headRadius * 0.94;
   const snoutY = headY + forwardY * headRadius * 0.94;
   ctx.fillStyle = "#f3d2c4";
   ctx.beginPath();
-  ctx.ellipse(snoutX, snoutY, headRadius * 0.68, headRadius * 0.48, bodyAngle, 0, Math.PI * 2);
+  ctx.ellipse(snoutX, snoutY, headRadius * 0.78, headRadius * 0.52, bodyAngle, 0, Math.PI * 2);
   ctx.fill();
-  ctx.fillStyle = "#fff7f0";
+  ctx.fillStyle = "#fff8f4";
   ctx.beginPath();
-  ctx.ellipse(snoutX - forwardX * headRadius * 0.16, snoutY - forwardY * headRadius * 0.1, headRadius * 0.4, headRadius * 0.24, bodyAngle, 0, Math.PI * 2);
+  ctx.ellipse(
+    snoutX - forwardX * headRadius * 0.18,
+    snoutY - forwardY * headRadius * 0.08,
+    headRadius * 0.46,
+    headRadius * 0.26,
+    bodyAngle,
+    0,
+    Math.PI * 2,
+  );
   ctx.fill();
 
-  const leftEyeX = headX + Math.cos(bodyAngle - 0.48) * headRadius * 0.32;
-  const leftEyeY = headY + Math.sin(bodyAngle - 0.48) * headRadius * 0.24 - 2;
-  const rightEyeX = headX + Math.cos(bodyAngle + 0.48) * headRadius * 0.32;
-  const rightEyeY = headY + Math.sin(bodyAngle + 0.48) * headRadius * 0.24 - 2;
+  const leftEyeX = headX + Math.cos(bodyAngle - 0.5) * headRadius * 0.28;
+  const leftEyeY = headY + Math.sin(bodyAngle - 0.5) * headRadius * 0.2 - headRadius * 0.05;
+  const rightEyeX = headX + Math.cos(bodyAngle + 0.5) * headRadius * 0.28;
+  const rightEyeY = headY + Math.sin(bodyAngle + 0.5) * headRadius * 0.2 - headRadius * 0.05;
   ctx.fillStyle = "#ffffff";
   ctx.beginPath();
-  ctx.arc(leftEyeX, leftEyeY, headRadius * 0.24, 0, Math.PI * 2);
-  ctx.arc(rightEyeX, rightEyeY, headRadius * 0.24, 0, Math.PI * 2);
+  ctx.ellipse(leftEyeX, leftEyeY, headRadius * 0.18, headRadius * 0.22, bodyAngle, 0, Math.PI * 2);
+  ctx.ellipse(rightEyeX, rightEyeY, headRadius * 0.18, headRadius * 0.22, bodyAngle, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = "#1f1515";
   ctx.beginPath();
-  ctx.arc(leftEyeX + forwardX * 2, leftEyeY + forwardY * 2, headRadius * 0.1, 0, Math.PI * 2);
-  ctx.arc(rightEyeX + forwardX * 2, rightEyeY + forwardY * 2, headRadius * 0.1, 0, Math.PI * 2);
+  ctx.arc(leftEyeX + forwardX * 2, leftEyeY + forwardY * 2, headRadius * 0.08, 0, Math.PI * 2);
+  ctx.arc(rightEyeX + forwardX * 2, rightEyeY + forwardY * 2, headRadius * 0.08, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = "#ffffff";
   ctx.beginPath();
-  ctx.arc(leftEyeX - 2, leftEyeY - 2, headRadius * 0.06, 0, Math.PI * 2);
-  ctx.arc(rightEyeX - 2, rightEyeY - 2, headRadius * 0.06, 0, Math.PI * 2);
+  ctx.arc(leftEyeX - headRadius * 0.05, leftEyeY - headRadius * 0.06, headRadius * 0.04, 0, Math.PI * 2);
+  ctx.arc(rightEyeX - headRadius * 0.05, rightEyeY - headRadius * 0.06, headRadius * 0.04, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.fillStyle = "#1f1515";
   ctx.beginPath();
-  ctx.arc(snoutX + forwardX * headRadius * 0.18, snoutY + forwardY * headRadius * 0.02, headRadius * 0.16, 0, Math.PI * 2);
+  ctx.ellipse(
+    snoutX + forwardX * headRadius * 0.18,
+    snoutY + forwardY * headRadius * 0.02,
+    headRadius * 0.17,
+    headRadius * 0.13,
+    bodyAngle,
+    0,
+    Math.PI * 2,
+  );
   ctx.fill();
   ctx.strokeStyle = "#6d1111";
   ctx.lineWidth = Math.max(2, headRadius * 0.05);
   ctx.beginPath();
   ctx.moveTo(snoutX + forwardX * headRadius * 0.12, snoutY + forwardY * headRadius * 0.1);
-  ctx.lineTo(snoutX + forwardX * headRadius * 0.08, snoutY + forwardY * headRadius * 0.22);
+  ctx.lineTo(snoutX + forwardX * headRadius * 0.08, snoutY + forwardY * headRadius * 0.19);
   ctx.stroke();
 
   ctx.strokeStyle = "#7e0d0d";
   ctx.lineWidth = Math.max(2, headRadius * 0.06);
   ctx.beginPath();
-  ctx.arc(snoutX + forwardX * headRadius * 0.03, snoutY + forwardY * headRadius * 0.24, headRadius * 0.28, 0.18, Math.PI - 0.18);
+  ctx.arc(
+    snoutX + forwardX * headRadius * 0.02,
+    snoutY + forwardY * headRadius * 0.18,
+    headRadius * 0.22,
+    0.24,
+    Math.PI - 0.24,
+  );
   ctx.stroke();
 
   ctx.fillStyle = "#ffb0bb";
   ctx.beginPath();
-  ctx.arc(headX + Math.cos(bodyAngle - 1.82) * headRadius * 0.48, headY + Math.sin(bodyAngle - 1.82) * headRadius * 0.48 + headRadius * 0.12, headRadius * 0.12, 0, Math.PI * 2);
-  ctx.arc(headX + Math.cos(bodyAngle + 1.82) * headRadius * 0.48, headY + Math.sin(bodyAngle + 1.82) * headRadius * 0.48 + headRadius * 0.12, headRadius * 0.12, 0, Math.PI * 2);
+  ctx.arc(headX + Math.cos(bodyAngle - 1.86) * headRadius * 0.44, headY + Math.sin(bodyAngle - 1.86) * headRadius * 0.44 + headRadius * 0.1, headRadius * 0.1, 0, Math.PI * 2);
+  ctx.arc(headX + Math.cos(bodyAngle + 1.86) * headRadius * 0.44, headY + Math.sin(bodyAngle + 1.86) * headRadius * 0.44 + headRadius * 0.1, headRadius * 0.1, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.fillStyle = "#ffffff";
@@ -979,7 +1013,7 @@ function drawStatusOverlay() {
 }
 
 function loop(timestamp = 0) {
-  const deltaMs = state.lastTimestamp === 0 ? 16.67 : Math.min(33.34, timestamp - state.lastTimestamp);
+  const deltaMs = state.lastTimestamp === 0 ? 16.67 : Math.min(25, timestamp - state.lastTimestamp);
   state.lastTimestamp = timestamp;
   const deltaFactor = deltaMs / 16.67;
 
