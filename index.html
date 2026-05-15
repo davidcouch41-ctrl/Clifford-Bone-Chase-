@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clifford Bone Chase</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="game-shell">
+    <section class="hud">
+      <div>
+        <h1>Clifford Bone Chase</h1>
+        <p>Collect 3 bones per level, outrun the guards, and survive all 10 levels.</p>
+      </div>
+      <div class="stats">
+        <p>Level: <span>1</span></p>
+        <p>Bones: <span id="score">0</span></p>
+        <p>Goal: <span id="width">0/3</span></p>
+        <p>Gun: <span>none</span></p>
+      </div>
+    </section>
+
+    <canvas id="game" width="720" height="720" aria-label="Dog bone chase game"></canvas>
+
+    <section class="controls">
+      <p>Move with arrow keys or WASD. Shoot with X or Enter.</p>
+      <p>Tail hits slow Clifford down. Avoid fences, police webs, and falling bombs. Press space to restart.</p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
