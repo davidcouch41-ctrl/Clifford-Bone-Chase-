@@ -1,8 +1,5 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
-const scoreEl = document.getElementById("score");
-const widthEl = document.getElementById("width");
-
 const arenaSize = canvas.width;
 const baseSpeed = 7.8;
 const turnRate = 0.17;
@@ -59,8 +56,6 @@ const input = {
 };
 
 function updateHud() {
-  scoreEl.textContent = String(dog.totalBones);
-  widthEl.textContent = `${dog.bonesThisLevel}/${bonesPerLevel}`;
   scoreLabel.innerHTML = `
     <p>Level: <span>${state.level}</span></p>
     <p>Bones: <span id="score">${dog.totalBones}</span></p>
