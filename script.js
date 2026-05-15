@@ -688,20 +688,20 @@ function drawDog() {
   ctx.ellipse(chestX + normalX * dog.radius * 0.2, chestY + normalY * dog.radius * 0.18, neckRadius * 0.42, neckRadius * 0.28, bodyAngle, 0, Math.PI * 2);
   ctx.fill();
 
-  drawEar(headX - forwardX * headRadius * 0.22 + Math.cos(bodyAngle - 1.72) * headRadius * 0.76, headY - forwardY * headRadius * 0.22 + Math.sin(bodyAngle - 1.72) * headRadius * 0.76, bodyAngle - 0.2, headRadius * 0.82);
-  drawEar(headX - forwardX * headRadius * 0.22 + Math.cos(bodyAngle + 1.72) * headRadius * 0.76, headY - forwardY * headRadius * 0.22 + Math.sin(bodyAngle + 1.72) * headRadius * 0.76, bodyAngle + 0.2, headRadius * 0.82);
+  const leftEarX = headX - forwardX * headRadius * 0.18 + Math.cos(bodyAngle - 1.7) * headRadius * 0.72;
+  const leftEarY = headY - forwardY * headRadius * 0.18 + Math.sin(bodyAngle - 1.7) * headRadius * 0.72;
+  const rightEarX = headX - forwardX * headRadius * 0.18 + Math.cos(bodyAngle + 1.7) * headRadius * 0.72;
+  const rightEarY = headY - forwardY * headRadius * 0.18 + Math.sin(bodyAngle + 1.7) * headRadius * 0.72;
+  drawEar(leftEarX, leftEarY, bodyAngle - 0.28, headRadius * 0.9);
+  drawEar(rightEarX, rightEarY, bodyAngle + 0.28, headRadius * 0.9);
 
-  ctx.fillStyle = "#d62323";
-  ctx.beginPath();
-  ctx.arc(headX, headY, headRadius, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#b81818";
+  ctx.fillStyle = "#c21d1d";
   ctx.beginPath();
   ctx.ellipse(
-    headX - forwardX * headRadius * 0.16,
-    headY - forwardY * headRadius * 0.08,
+    headX - forwardX * headRadius * 0.08,
+    headY - forwardY * headRadius * 0.02,
+    headRadius * 0.96,
     headRadius * 0.84,
-    headRadius * 0.72,
     bodyAngle,
     0,
     Math.PI * 2,
@@ -712,80 +712,57 @@ function drawDog() {
   ctx.arc(headX, headY, headRadius * 0.9, 0, Math.PI * 2);
   ctx.fill();
 
-  const snoutX = headX + forwardX * headRadius * 0.94;
-  const snoutY = headY + forwardY * headRadius * 0.94;
-  ctx.fillStyle = "#f3d2c4";
+  const muzzleX = headX + forwardX * headRadius * 0.8;
+  const muzzleY = headY + forwardY * headRadius * 0.72;
+  ctx.fillStyle = "#f1d6c7";
   ctx.beginPath();
-  ctx.ellipse(snoutX, snoutY, headRadius * 0.78, headRadius * 0.52, bodyAngle, 0, Math.PI * 2);
+  ctx.ellipse(muzzleX, muzzleY, headRadius * 0.7, headRadius * 0.46, bodyAngle, 0, Math.PI * 2);
   ctx.fill();
-  ctx.fillStyle = "#fff8f4";
+
+  const leftEyeX = headX + Math.cos(bodyAngle - 0.46) * headRadius * 0.26;
+  const leftEyeY = headY + Math.sin(bodyAngle - 0.46) * headRadius * 0.18 - headRadius * 0.03;
+  const rightEyeX = headX + Math.cos(bodyAngle + 0.46) * headRadius * 0.26;
+  const rightEyeY = headY + Math.sin(bodyAngle + 0.46) * headRadius * 0.18 - headRadius * 0.03;
+  ctx.fillStyle = "#1f1515";
+  ctx.beginPath();
+  ctx.arc(leftEyeX, leftEyeY, headRadius * 0.095, 0, Math.PI * 2);
+  ctx.arc(rightEyeX, rightEyeY, headRadius * 0.095, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "#ffffff";
+  ctx.beginPath();
+  ctx.arc(leftEyeX - headRadius * 0.025, leftEyeY - headRadius * 0.03, headRadius * 0.03, 0, Math.PI * 2);
+  ctx.arc(rightEyeX - headRadius * 0.025, rightEyeY - headRadius * 0.03, headRadius * 0.03, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = "#1f1515";
   ctx.beginPath();
   ctx.ellipse(
-    snoutX - forwardX * headRadius * 0.18,
-    snoutY - forwardY * headRadius * 0.08,
-    headRadius * 0.46,
-    headRadius * 0.26,
+    muzzleX + forwardX * headRadius * 0.12,
+    muzzleY - forwardY * headRadius * 0.02,
+    headRadius * 0.16,
+    headRadius * 0.12,
     bodyAngle,
     0,
     Math.PI * 2,
   );
   ctx.fill();
 
-  const leftEyeX = headX + Math.cos(bodyAngle - 0.5) * headRadius * 0.28;
-  const leftEyeY = headY + Math.sin(bodyAngle - 0.5) * headRadius * 0.2 - headRadius * 0.05;
-  const rightEyeX = headX + Math.cos(bodyAngle + 0.5) * headRadius * 0.28;
-  const rightEyeY = headY + Math.sin(bodyAngle + 0.5) * headRadius * 0.2 - headRadius * 0.05;
-  ctx.fillStyle = "#ffffff";
-  ctx.beginPath();
-  ctx.ellipse(leftEyeX, leftEyeY, headRadius * 0.18, headRadius * 0.22, bodyAngle, 0, Math.PI * 2);
-  ctx.ellipse(rightEyeX, rightEyeY, headRadius * 0.18, headRadius * 0.22, bodyAngle, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#1f1515";
-  ctx.beginPath();
-  ctx.arc(leftEyeX + forwardX * 2, leftEyeY + forwardY * 2, headRadius * 0.08, 0, Math.PI * 2);
-  ctx.arc(rightEyeX + forwardX * 2, rightEyeY + forwardY * 2, headRadius * 0.08, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#ffffff";
-  ctx.beginPath();
-  ctx.arc(leftEyeX - headRadius * 0.05, leftEyeY - headRadius * 0.06, headRadius * 0.04, 0, Math.PI * 2);
-  ctx.arc(rightEyeX - headRadius * 0.05, rightEyeY - headRadius * 0.06, headRadius * 0.04, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = "#1f1515";
-  ctx.beginPath();
-  ctx.ellipse(
-    snoutX + forwardX * headRadius * 0.18,
-    snoutY + forwardY * headRadius * 0.02,
-    headRadius * 0.17,
-    headRadius * 0.13,
-    bodyAngle,
-    0,
-    Math.PI * 2,
-  );
-  ctx.fill();
-  ctx.strokeStyle = "#6d1111";
+  ctx.strokeStyle = "#6f1111";
   ctx.lineWidth = Math.max(2, headRadius * 0.05);
   ctx.beginPath();
-  ctx.moveTo(snoutX + forwardX * headRadius * 0.12, snoutY + forwardY * headRadius * 0.1);
-  ctx.lineTo(snoutX + forwardX * headRadius * 0.08, snoutY + forwardY * headRadius * 0.19);
-  ctx.stroke();
-
-  ctx.strokeStyle = "#7e0d0d";
-  ctx.lineWidth = Math.max(2, headRadius * 0.06);
-  ctx.beginPath();
   ctx.arc(
-    snoutX + forwardX * headRadius * 0.02,
-    snoutY + forwardY * headRadius * 0.18,
-    headRadius * 0.22,
-    0.24,
-    Math.PI - 0.24,
+    muzzleX,
+    muzzleY + headRadius * 0.06,
+    headRadius * 0.24,
+    0.28,
+    Math.PI - 0.28,
   );
   ctx.stroke();
 
   ctx.fillStyle = "#ffb0bb";
   ctx.beginPath();
-  ctx.arc(headX + Math.cos(bodyAngle - 1.86) * headRadius * 0.44, headY + Math.sin(bodyAngle - 1.86) * headRadius * 0.44 + headRadius * 0.1, headRadius * 0.1, 0, Math.PI * 2);
-  ctx.arc(headX + Math.cos(bodyAngle + 1.86) * headRadius * 0.44, headY + Math.sin(bodyAngle + 1.86) * headRadius * 0.44 + headRadius * 0.1, headRadius * 0.1, 0, Math.PI * 2);
+  ctx.arc(headX + Math.cos(bodyAngle - 1.92) * headRadius * 0.38, headY + Math.sin(bodyAngle - 1.92) * headRadius * 0.38 + headRadius * 0.08, headRadius * 0.08, 0, Math.PI * 2);
+  ctx.arc(headX + Math.cos(bodyAngle + 1.92) * headRadius * 0.38, headY + Math.sin(bodyAngle + 1.92) * headRadius * 0.38 + headRadius * 0.08, headRadius * 0.08, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.fillStyle = "#ffffff";
