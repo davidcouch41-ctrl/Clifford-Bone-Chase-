@@ -72,7 +72,8 @@ const audioState = {
   enabled: true,
   context: null,
   musicGain: null,
-  musicOscillators: [],
+  musicTimer: null,
+  musicStep: 0,
 };
 
 const dog = {
@@ -160,9 +161,13 @@ function ensureAudioContext() {
     return null;
   }
   if (!audioState.context) {
-    audioState.context = new AudioContext();
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) {
+      return null;
+    }
+    audioState.context = new AudioContextClass();
     audioState.musicGain = audioState.context.createGain();
-    audioState.musicGain.gain.value = 0.03;
+    audioState.musicGain.gain.value = 0.22;
     audioState.musicGain.connect(audioState.context.destination);
   } else if (audioState.context.state === "suspended") {
     audioState.context.resume();
@@ -175,6 +180,24 @@ function playSound(type) {
   if (!context) {
     return;
   }
+
+  if (type === "scream") {
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+    oscillator.type = "sawtooth";
+    oscillator.frequency.setValueAtTime(320, context.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(120, context.currentTime + 0.12);
+    oscillator.frequency.exponentialRampToValueAtTime(180, context.currentTime + 0.34);
+    gain.gain.setValueAtTime(0.001, context.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.16, context.currentTime + 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.42);
+    oscillator.connect(gain);
+    gain.connect(context.destination);
+    oscillator.start(context.currentTime);
+    oscillator.stop(context.currentTime + 0.42);
+    return;
+  }
+
   const oscillator = context.createOscillator();
   const gain = context.createGain();
   oscillator.type = type === "danger" ? "sawtooth" : "square";
@@ -187,7 +210,7 @@ function playSound(type) {
     danger: 110,
     level: 760,
   }[type] || 300;
-  gain.gain.value = type === "danger" ? 0.06 : 0.045;
+  gain.gain.value = type === "danger" ? 0.12 : 0.085;
   oscillator.connect(gain);
   gain.connect(context.destination);
   const now = context.currentTime;
@@ -198,25 +221,86 @@ function playSound(type) {
 
 function startMusic() {
   const context = ensureAudioContext();
-  if (!context || audioState.musicOscillators.length) {
+  if (!context || audioState.musicTimer) {
     return;
   }
-  const notes = [110, 165, 220];
-  audioState.musicOscillators = notes.map((frequency) => {
-    const oscillator = context.createOscillator();
-    oscillator.type = "triangle";
-    oscillator.frequency.value = frequency;
-    oscillator.connect(audioState.musicGain);
-    oscillator.start();
-    return oscillator;
-  });
+
+  audioState.musicStep = 0;
+  const pattern = [110, 146, 123, 164, 110, 146, 123, 196];
+  const playBeat = () => {
+    if (!audioState.enabled || !audioState.context) {
+      return;
+    }
+
+    const now = context.currentTime;
+    const step = audioState.musicStep % pattern.length;
+    const frequency = pattern[step];
+
+    const kick = context.createOscillator();
+    const kickGain = context.createGain();
+    kick.type = "triangle";
+    kick.frequency.setValueAtTime(step % 2 === 0 ? 96 : 78, now);
+    kick.frequency.exponentialRampToValueAtTime(38, now + 0.22);
+    kickGain.gain.setValueAtTime(0.001, now);
+    kickGain.gain.exponentialRampToValueAtTime(0.32, now + 0.01);
+    kickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.24);
+    kick.connect(kickGain);
+    kickGain.connect(audioState.musicGain);
+    kick.start(now);
+    kick.stop(now + 0.26);
+
+    const tom = context.createOscillator();
+    const tomGain = context.createGain();
+    tom.type = "square";
+    tom.frequency.setValueAtTime(step % 4 === 0 ? 180 : 140, now + 0.06);
+    tom.frequency.exponentialRampToValueAtTime(90, now + 0.16);
+    tomGain.gain.setValueAtTime(0.001, now + 0.06);
+    tomGain.gain.exponentialRampToValueAtTime(0.12, now + 0.08);
+    tomGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+    tom.connect(tomGain);
+    tomGain.connect(audioState.musicGain);
+    tom.start(now + 0.06);
+    tom.stop(now + 0.2);
+
+    const flute = context.createOscillator();
+    const fluteGain = context.createGain();
+    flute.type = "sine";
+    flute.frequency.setValueAtTime(frequency, now);
+    flute.frequency.exponentialRampToValueAtTime(frequency * 1.03, now + 0.08);
+    fluteGain.gain.setValueAtTime(0.001, now);
+    fluteGain.gain.exponentialRampToValueAtTime(0.16, now + 0.02);
+    fluteGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.24);
+    flute.connect(fluteGain);
+    fluteGain.connect(audioState.musicGain);
+    flute.start(now);
+    flute.stop(now + 0.26);
+
+    if (step === 3 || step === 7) {
+      const accent = context.createOscillator();
+      const accentGain = context.createGain();
+      accent.type = "square";
+      accent.frequency.setValueAtTime(frequency * 2, now);
+      accentGain.gain.setValueAtTime(0.001, now);
+      accentGain.gain.exponentialRampToValueAtTime(0.06, now + 0.01);
+      accentGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+      accent.connect(accentGain);
+      accentGain.connect(audioState.musicGain);
+      accent.start(now);
+      accent.stop(now + 0.14);
+    }
+
+    audioState.musicStep += 1;
+  };
+
+  playBeat();
+  audioState.musicTimer = window.setInterval(playBeat, 260);
 }
 
 function stopMusic() {
-  for (const oscillator of audioState.musicOscillators) {
-    oscillator.stop();
+  if (audioState.musicTimer) {
+    window.clearInterval(audioState.musicTimer);
+    audioState.musicTimer = null;
   }
-  audioState.musicOscillators = [];
 }
 
 function calculateScore() {
@@ -444,7 +528,7 @@ function triggerExplosion() {
   buildExplosion();
   state.caughtSpin = Math.random() * Math.PI * 2;
   stopMusic();
-  playSound("danger");
+  playSound("scream");
   showSubmissionPanel("busted");
 }
 
@@ -1791,6 +1875,14 @@ window.addEventListener("keydown", (event) => {
     startMusic();
   }
   setKeyState(event, true);
+});
+
+window.addEventListener("pointerdown", () => {
+  if (audioState.enabled) {
+    ensureAudioContext();
+    startMusic();
+    playSound("level");
+  }
 });
 
 window.addEventListener("keyup", (event) => {
