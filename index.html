@@ -3,32 +3,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Clifford Bone Chase browser game">
-  <title>Clifford Bone Chase</title>
+  <meta name="description" content="Dinosaur Attack browser game with loot runs, dinosaurs, and prehistoric hazards">
+  <title>Dinosaur Attack</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="game-shell">
-    <section class="hud">
-      <div>
-        <h1>Clifford Bone Chase</h1>
-        <p>Collect 3 bones per level, outrun the guards, and survive all 10 levels.</p>
-      </div>
-      <div class="stats">
-        <p>Level: <span>1</span></p>
-        <p>Bones: <span id="score">0</span></p>
-        <p>Goal: <span id="width">0/3</span></p>
-        <p>Gun: <span>none</span></p>
-      </div>
-    </section>
+  <div class="app-shell">
+    <main class="game-shell">
+      <section class="hud">
+        <div>
+          <h1>Dinosaur Attack</h1>
+          <p>Grab 3 loot drops per level, outrun the dinosaurs, and clear all 10 levels.</p>
+        </div>
+        <div class="stats">
+          <p>Level: <span>1</span></p>
+          <p>Loot: <span id="score">0</span></p>
+          <p>Bag: <span id="width">0/3</span></p>
+          <p>Blaster: <span>none</span></p>
+          <p>Health: <span>3</span></p>
+        </div>
+      </section>
 
-    <canvas id="game" width="720" height="720" aria-label="Dog bone chase game"></canvas>
+      <canvas id="game" width="840" height="840" aria-label="Dinosaur Attack game"></canvas>
 
-    <section class="controls">
-      <p>Move with arrow keys or WASD. Shoot with X or Enter.</p>
-      <p>Tail hits slow Clifford down. Avoid fences, police webs, and falling bombs. Press space to restart.</p>
-    </section>
-  </main>
+      <section class="controls">
+        <p>Move with arrow keys or WASD. Fire with X or Enter when you have a blaster pickup.</p>
+        <p>Your growing trail can slow you down. Avoid stone walls, thrown rocks, darts, and falling asteroids. Press space to restart.</p>
+        <p>Armor blocks a hit, medkits heal you, and the leaderboard tracks the best loot runs.</p>
+      </section>
+    </main>
+
+    <aside class="sidebar">
+      <section class="panel">
+        <h2>Player</h2>
+        <div id="auth-view-guest">
+          <p class="panel-copy">Create an account to save your name on the leaderboard.</p>
+          <form id="register-form" class="stack-form">
+            <label for="register-username">Username</label>
+            <input id="register-username" name="username" type="text" maxlength="24" placeholder="Player name" required>
+            <label for="register-password">Password</label>
+            <input id="register-password" name="password" type="password" minlength="6" placeholder="At least 6 characters" required>
+            <button type="submit">Register</button>
+          </form>
+          <form id="login-form" class="stack-form auth-divider">
+            <label for="login-username">Username</label>
+            <input id="login-username" name="username" type="text" maxlength="24" placeholder="Existing account" required>
+            <label for="login-password">Password</label>
+            <input id="login-password" name="password" type="password" minlength="6" required>
+            <button type="submit">Login</button>
+          </form>
+        </div>
+        <div id="auth-view-user" class="hidden">
+          <p class="panel-copy">Signed in as <strong id="current-username"></strong>.</p>
+          <button id="logout-button" type="button">Logout</button>
+        </div>
+        <p class="panel-copy" id="auth-status"></p>
+      </section>
+
+      <section class="panel">
+        <h2>Run Setup</h2>
+        <label for="difficulty-select">Difficulty</label>
+        <select id="difficulty-select">
+          <option value="rookie">Rookie</option>
+          <option value="classic" selected>Classic</option>
+          <option value="onslaught">Onslaught</option>
+        </select>
+        <p class="panel-copy" id="difficulty-copy">Balanced dinosaur pressure and scoring.</p>
+        <button id="sound-toggle" type="button">Sound: On</button>
+      </section>
+
+      <section class="panel">
+        <h2>Leaderboard</h2>
+          <p class="panel-copy">Top dinosaur survival runs by total score.</p>
+        <ol id="leaderboard-list" class="leaderboard-list">
+          <li>Loading leaderboard...</li>
+        </ol>
+      </section>
+
+      <section class="panel hidden" id="submission-panel">
+        <h2>Record Your Run</h2>
+        <p class="panel-copy" id="submission-summary"></p>
+        <form id="leaderboard-form">
+          <label for="leaderboard-name">Guest name</label>
+          <input id="leaderboard-name" name="name" type="text" maxlength="24" placeholder="Only used when logged out">
+          <button type="submit">Submit score</button>
+        </form>
+        <p class="panel-copy" id="submission-status"></p>
+      </section>
+    </aside>
+  </div>
 
   <script src="script.js"></script>
 </body>

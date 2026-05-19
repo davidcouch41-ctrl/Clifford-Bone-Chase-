@@ -1,4 +1,4 @@
-# Clifford Bone Chase
+# Dinosaur Attack
 
 Browser game files:
 
@@ -7,4 +7,4 @@ Browser game files:
 - `script.js`
 - `render.yaml`
 
-This repo is a static browser game intended to deploy on Render as a static site.
+This repo is a browser action game where you collect loot while dodging brachiosaurus patrols, thrown rocks, darts, and falling hazards.
